@@ -7,24 +7,51 @@ YELLOW = (255,255,0)
 
 
 # !!!  can play with this size for production version
-WIDTH, HEIGHT = 800,800
+WIDTH, HEIGHT = 800, 800
 TILE_SIZE = 20
 
-GRID_WIDTH = WIDTH/TILE_SIZE
-GRID HEIGHT = HEIGHT/TILE_SIZE
+GRID_WIDTH = WIDTH//TILE_SIZE
+GRID_HEIGHT = HEIGHT//TILE_SIZE
 
 FPS = 60
 
-screen = pygame.display/pygame.display.set_mode(WIDTH, HEIGHT)
+screen = pygame.display.set_mode((WIDTH,HEIGHT))
 
-clock = pygame.time.Clock
+clock = pygame.time.Clock()
+
+
+def draw_grid(positions):
+    
+    for position in positions:
+        col, row = position
+        top_left = (col * TILE_SIZE, row * TILE_SIZE)
+        pygame.draw.line(screen, YELLOW, *top_left, TILE_SIZE, TILE_SIZE)
+    
+    
+    
+    for row in range(GRID_HEIGHT):
+        pygame.draw.line(screen, BLACK,(0, row * TILE_SIZE),(WIDTH, row * TILE_SIZE))
+    for col in range(GRID_WIDTH):
+        pygame.draw.line(screen, BLACK,(col * TILE_SIZE, 0),(col*TILE_SIZE,HEIGHT))
 
 # Main Loop
 def main():
-    running = Trwe
+    running = True
     
+    positions = set()
+    positions.add((10,10))
     while running:
         clock.tick(FPS)
         
         for event in pygame.event.get():
-             
+            if event.type == pygame.QUIT:
+                running = False
+                
+
+        screen.fill(GREY)
+        draw_grid(positions)
+        pygame.display.update()
+    pygame.quit()
+    
+if  __name__ == "__main__":
+    main()
