@@ -40,7 +40,7 @@ def adjust_grid(positions):
     new_positions = set()
     
     for position in positions:
-        neighbors = get_neighbors(positions)
+        neighbors = get_neighbors(position)
         all_neighbors.update(neighbors)
     
         neighbors = list(filter (lambda x: x in positions,neighbors))
@@ -58,18 +58,41 @@ def adjust_grid(positions):
     return new_positions
         
 
-def get_neighbors():
-    pass
-
+def get_neighbors(pos):
+    x,y = pos
+    neightbors = []
+    for dx in [-1,0,1]:
+        if x + dx < 0 or x + dx > GRID_WIDTH:
+            continue
+        for dy  in [-1,0,1]:
+            if x + dy < 0 or y + dy > GRID_HEIGHT:
+                continue
+            if dx == 0 and dy == 0:
+                continue
+            
+            neightbors.append((x + dx , y + dy))
+    
+    return neightbors
 
 # Main Loop
 def main():
     running = True
     playing = False
+    count = 0
+    update_freq = 30
     positions = set()
     
     while running:
         clock.tick(FPS)
+        
+        if playing:
+            count += 1
+            
+        if count == update_freq:
+            count = 0
+            positions = adjust_grid(positions)
+            
+        pygame.display.set_caption("Playing" if playing else "Pause")
     
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -96,6 +119,7 @@ def main():
                 if event.key == pygame.K_c:
                     positions = set()
                     playing = False
+                    count = 0
                 
                 if event.key == pygame.K_g:
                     positions = gen(random.randrange(2,5)* GRID_WIDTH)
